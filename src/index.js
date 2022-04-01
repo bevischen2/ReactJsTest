@@ -60,16 +60,11 @@ class ContractMethodSend extends React.Component {
     let args = [...event.target]
       .slice(0, event.target.length - 1)
       .map((e) => (e.value));
-
-    contract.methods[method](...args)
-      .estimateGas({ from: account }).then((gas) => {
-        console.log('estimateGas: ' + gas);
-      });
+    let eGas = await contract.methods[method](...args).estimateGas({ from: account });
 
     this.setState({ status: 'Executing...' });
-
     contract.methods[method](...args)
-      .send({ from: account })
+      .send({ from: account, gas: Math.floor(eGas * 1.5) })
       .on('transactionHash', (hash) => {
         this.setState({
           status: [
@@ -236,7 +231,7 @@ class Base extends React.Component {
         break
     }
     const artifacts = await res.json();
-    
+
     // load contract.
     const web3 = this.state.web3;
     const { abi, address } = artifacts.contracts.GatewayManager;
