@@ -7,10 +7,6 @@ import Web3 from 'web3';
 class ContractMethodSend extends React.Component {
   constructor(props) {
     super(props);
-    let args;
-    if (typeof props.args !== 'undefined' && props.args.length > 0) {
-      args = props.args;
-    }
     this.state = {
       web3: props.web3,
       accounts: props.accounts,
@@ -227,6 +223,7 @@ class Base extends React.Component {
         break;
       case 4:
         res = await fetch('./rinkeby.network.json');
+        break;
       default:
         break
     }
@@ -268,9 +265,13 @@ class Base extends React.Component {
   }
 
   render() {
-    if (!this.state.provider || this.state.accounts.length == 0) {
+    if (!this.state.provider || this.state.accounts.length === 0) {
       return (
-        <div><button onClick={async () => { this.connect() }} >Connect</button></div>
+        <div>
+          v1.0.1
+          <br />
+          <button onClick={async () => { this.connect() }} >Connect</button>
+        </div>
       );
     }
 
